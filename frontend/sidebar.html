@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modern Sidebar & Navbar</title>
+  
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#6366f1', // Indigo soft color
+            secondary: '#1f2937', // Dark gray for sidebar dark
+            active: '#4f46e5', // Color for active menu
+            activeText: '#ffffff', // Active text color
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .sidebar-transition {
+      transition: width 0.3s, background-color 0.3s;
+    }
+    .menu-transition {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .notification-count {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: #f87171;
+      color: white;
+      border-radius: 50%;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.75rem;
+    }
+
+    .active-link {
+      background-color: #655de9;
+      color: #fff;
+    }
+
+    .active-link i {
+      color: #fff;
+    }
+
+    .active-link:hover {
+      background-color: #655de9 !important;
+      color: #fff !important;
+    }
+
+    .active-link i:hover {
+      color: #fff !important;
+    }
+
+    .SystemName{
+      padding: 1.12rem;
+    }
+  </style>
+</head>
+<body class="flex h-screen bg-gray-100 dark:bg-gray-900 dark:text-white">
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar-transition w-64 bg-white dark:bg-secondary text-gray-800 dark:text-gray-100 flex flex-col">
+    <div class="flex items-center justify-between border-b dark:border-gray-700 SystemName">
+      <span id="sidebarTitle" class="text-xl font-bold">MyApp</span>
+      <button id="collapseBtn" class="text-gray-600 dark:text-gray-300 focus:outline-none">
+        &#9776;
+      </button>
+    </div>
+    <nav class="flex-1 p-2">
+      <ul class="space-y-2">
+        <li>
+          <a href="#" class="flex items-center p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md active-link" id="dashboardMenu">
+            <i class="fas fa-tachometer-alt w-5 h-5 text-gray-800 dark:text-gray-100"></i>
+            <span class="ml-3 sidebar-text">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <div class="group">
+            <a href="#" class="flex items-center justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md" id="settingsMenu">
+              <div class="flex items-center">
+                <i class="fas fa-cogs w-5 h-5 text-gray-800 dark:text-gray-100"></i>
+                <span class="ml-3 sidebar-text">Settings</span>
+              </div>
+              <svg class="w-4 h-4 transform group-hover:rotate-90 transition-transform text-gray-800 dark:text-gray-100" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M9 5l7 7-7 7"></path>
+              </svg>
+            </a>
+            <ul class="hidden group-hover:block pl-12 mt-2 space-y-2">
+              <li><a href="#" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md">Profile Settings</a></li>
+              <li><a href="#" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md">Account Settings</a></li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <a href="#" class="flex items-center p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md" id="notificationMenu">
+            <i class="fas fa-bell w-5 h-5 text-gray-800 dark:text-gray-100 relative">
+              <span id="notificationCount" class="notification-count hidden">3</span>
+            </i>
+            <span class="ml-3 sidebar-text">Notifications</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Main content -->
+  <div class="flex-1 flex flex-col">
+    <!-- Navbar -->
+    <div class="bg-white dark:bg-gray-800 shadow p-4 flex items-center justify-between">
+      <h1 class="text-2xl font-bold text-primary">Dashboard</h1>
+      <div class="flex items-center space-x-4">
+        <div class="relative">
+          <button id="notificationBtn" class="flex items-center text-gray-700 dark:text-gray-200 focus:outline-none">
+            <i class="fas fa-bell w-6 h-6 text-gray-800 dark:text-gray-100 relative">
+              <span id="notificationCountNavbar" class="notification-count hidden">3</span>
+            </i>
+          </button>
+          <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg">
+            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">No new notifications</a>
+          </div>
+        </div>
+        <div class="relative">
+          <button id="profileBtn" class="flex items-center space-x-2 text-gray-700 dark:text-gray-200 focus:outline-none">
+            <img class="w-8 h-8 rounded-full" src="https://i.pravatar.cc/40" alt="User">
+            <span class="hidden md:inline-block">Aazan Khan</span>
+          </button>
+          <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg">
+            <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+              <i class="fas fa-user-circle w-5 h-5 mr-2"></i> Profile
+            </a>
+            <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+              <i class="fas fa-cogs w-5 h-5 mr-2"></i> Settings
+            </a>
+            <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+              <i class="fas fa-sign-out-alt w-5 h-5 mr-2"></i> Logout
+            </a>
+          </div>
+        </div>
+        <!-- Dark mode toggle -->
+        <button id="darkModeToggle" class="text-gray-700 dark:text-gray-200 focus:outline-none">
+          🌙
+        </button>
+      </div>
+    </div>
+
+    <!-- Main content area -->
+    <div class="flex-1 p-6">
+      <p class="text-gray-700 dark:text-gray-300">This is the main content area.</p>
+    </div>
+  </div>
+
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const collapseBtn = document.getElementById('collapseBtn');
+    const sidebarTexts = document.querySelectorAll('.sidebar-text');
+    const sidebarTitle = document.getElementById('sidebarTitle');
+
+    const notificationBtn = document.getElementById('notificationBtn');
+    const notificationDropdown = document.getElementById('notificationDropdown');
+    const notificationCount = document.getElementById('notificationCount');
+    const notificationCountNavbar = document.getElementById('notificationCountNavbar');
+
+    const profileBtn = document.getElementById('profileBtn');
+    const profileDropdown = document.getElementById('profileDropdown');
+
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const htmlEl = document.documentElement;
+
+    const dashboardMenu = document.getElementById('dashboardMenu');
+    const settingsMenu = document.getElementById('settingsMenu');
+    const notificationMenu = document.getElementById('notificationMenu');
+
+    let isCollapsed = false;
+
+    collapseBtn.addEventListener('click', () => {
+      isCollapsed = !isCollapsed;
+      if (isCollapsed) {
+        sidebar.classList.add('w-16');
+        sidebar.classList.remove('w-64');
+        sidebarTitle.classList.add('hidden');
+        sidebarTexts.forEach(text => text.classList.add('hidden'));
+      } else {
+        sidebar.classList.add('w-64');
+        sidebar.classList.remove('w-16');
+        sidebarTitle.classList.remove('hidden');
+        sidebarTexts.forEach(text => text.classList.remove('hidden'));
+      }
+    });
+
+    sidebar.addEventListener('mouseenter', () => {
+      if (isCollapsed) {
+        sidebar.classList.remove('w-16');
+        sidebar.classList.add('w-64');
+        sidebarTitle.classList.remove('hidden');
+        sidebarTexts.forEach(text => text.classList.remove('hidden'));
+      }
+    });
+
+    sidebar.addEventListener('mouseleave', () => {
+      if (isCollapsed) {
+        sidebar.classList.remove('w-64');
+        sidebar.classList.add('w-16');
+        sidebarTitle.classList.add('hidden');
+        sidebarTexts.forEach(text => text.classList.add('hidden'));
+      }
+    });
+
+    profileBtn.addEventListener('click', () => {
+      profileDropdown.classList.toggle('hidden');
+      notificationDropdown.classList.add('hidden');
+    });
+
+    notificationBtn.addEventListener('click', () => {
+      notificationDropdown.classList.toggle('hidden');
+      profileDropdown.classList.add('hidden');
+    });
+
+    darkModeToggle.addEventListener('click', () => {
+      htmlEl.classList.toggle('dark');
+    });
+
+    // Menu Highlight
+    dashboardMenu.addEventListener('click', () => {
+      highlightMenu(dashboardMenu);
+    });
+
+    settingsMenu.addEventListener('click', () => {
+      highlightMenu(settingsMenu);
+    });
+
+    notificationMenu.addEventListener('click', () => {
+      highlightMenu(notificationMenu);
+    });
+
+    function highlightMenu(menu) {
+      // Remove active state from all menus
+      document.querySelectorAll('a').forEach(item => {
+        item.classList.remove('active-link');
+        item.querySelector('i').classList.remove('active-link');
+      });
+      // Add active state to clicked menu
+      menu.classList.add('active-link');
+      menu.querySelector('i').classList.add('active-link');
+    }
+
+    // Notification Count Logic
+    const count = parseInt(notificationCount.innerText, 10);
+    if (count > 0) {
+      notificationCount.classList.remove('hidden');
+    }
+
+  </script>
+
+</body>
+</html>

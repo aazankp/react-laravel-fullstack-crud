@@ -1,0 +1,13 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+
+html {
+    transition: background-color 0.4s, color 0.4s;
+}
+
+.table-btn {
+    @apply px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm hover:bg-indigo-700 transition;
+  }
+  
