@@ -1,67 +1,74 @@
-# Laravel Sanctum + React.js CRUD
+# Laravel API – Sanctum Authentication + Custom Role Management
 
-This is a full-stack web application built using **Laravel** with **Sanctum authentication** and **React.js** as the frontend framework. It includes features like login, registration, and full CRUD operations.
+This is the backend API built with **Laravel 12+** using **Laravel Sanctum** for authentication and a **custom-built user role system** (without external packages).
 
 ---
 
-## ⚙️ Technologies Used
+## ⚙️ Technologies
 
-- **Backend:** Laravel 12+ (Laravel Sanctum with token-based authentication)
-- **Frontend:** React.js (Tailwind CSS)
-- **Authentication:** Laravel Sanctum
-- **HTTP Requests:** Axios
+- Laravel 12+
+- Sanctum (API authentication)
+- MySQL
+- Custom Role Management (without packages)
 
 ---
 
 ## 🚀 Getting Started
 
-Follow the steps below to set up the project locally.
-
----
-
 ### 📥 Clone the Repository
 
----
-
-# Backend Setup
-
+```bash
+git clone https://github.com/aazankp/react-laravel-fullstack-crud.git
 cd backend
+
 
 # Install PHP dependencies
 composer install
 
-# Copy environment file
+# Copy the .env file
 cp .env.example .env
 
 # Generate application key
 php artisan key:generate
 
-# Configure database credentials in .env
-# Then run migrations if needed
+# Configure your database in the .env file
+
+# Run migrations
 php artisan migrate
 
-# Run the Laravel development server
+# Seed roles and sample data
+php artisan db:seed
+
+# Serve the API
 php artisan serve --host=127.0.0.1 --port=8000
 
+
+# React.js Frontend – Laravel Sanctum + CRUD + Custom Roles
+
+This is the frontend for the Laravel API, built with **React.js** and styled using **Tailwind CSS**. It includes **login/registration** with **Sanctum**, full **CRUD operations**, **custom role management**, a **dynamic table**, **confirmation modal**, and **light/dark mode** support.
 
 ---
 
-# Frontend Setup
+## ⚙️ Technologies Used
 
-cd backend
+- **React.js**
+- **Tailwind CSS**
+- **Axios** for API communication
+- **Laravel Sanctum** integration
+- **React Context API** or **Redux** for global state
+- **Custom Role Management** (no external packages like Spatie)
 
-# Install PHP dependencies
-composer install
+---
 
-# Copy environment file
-cp .env.example .env
 
-# Generate application key
-php artisan key:generate
 
-# Configure database credentials in .env
-# Then run migrations if needed
-php artisan migrate
+### 📥 Clone & Setup Front-End
 
-# Run the Laravel development server
-php artisan serve --host=127.0.0.1 --port=8000
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev

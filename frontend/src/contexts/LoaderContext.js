@@ -1,5 +1,6 @@
 import { createContext, useRef } from 'react';
 import LoadingBar from 'react-top-loading-bar';
+import { useDispatch } from 'react-redux';
 
 export const LoaderContext = createContext();
 

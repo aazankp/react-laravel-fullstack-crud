@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState, useRef } from 'react';
 import { Menu, RefreshCw, Download, FileText, FileDown } from 'lucide-react';
-import { LoaderContext } from '../contexts/LoaderContext';
+// import { LoaderContext } from '../contexts/LoaderContext';
 import { api, basePath } from '../services/api';
 
 const DataTable = ({ headers = [], hit_url = '', actions=[], Export=[], reloadTrigger }) => {
-    const { startLoading, finishLoading } = useContext(LoaderContext);
+    // const { startLoading, finishLoading } = useContext(LoaderContext);
     const [sortKey, setSortKey] = useState('');
     const [tableState, setTableState] = useState({
         data: [],
@@ -29,7 +29,7 @@ const DataTable = ({ headers = [], hit_url = '', actions=[], Export=[], reloadTr
     const token = localStorage.getItem('token');
 
     const fetchData = async () => {
-        startLoading();
+        // startLoading();
         try {
             const response = await api.get(basePath + hit_url, {
                 params: {
@@ -52,7 +52,7 @@ const DataTable = ({ headers = [], hit_url = '', actions=[], Export=[], reloadTr
         } catch (error) {
             console.error('Error fetching data:', error);
         } finally {
-            finishLoading();
+            // finishLoading();
         }
     };
 
@@ -147,16 +147,52 @@ const DataTable = ({ headers = [], hit_url = '', actions=[], Export=[], reloadTr
         } catch (error) {
             console.error('PDF export failed:', error);
         }
-    };      
+    };
 
+    const handlePrint = () => {
+        if (!containerRef.current) return;
+    
+        const clonedContainer = containerRef.current.cloneNode(true);
+    
+        const printIgnoreElements = clonedContainer.querySelectorAll('.print-ignore');
+        printIgnoreElements.forEach(el => el.remove());
+    
+        const rows = clonedContainer.querySelectorAll('tr');
+        rows.forEach(row => {
+            const lastCell = row.lastElementChild;
+            if (lastCell) lastCell.remove();
+        });
+    
+        const printWindow = window.open('', '', 'height=600,width=800');
+        printWindow.document.write('<html><head><title>Print Table</title>');
+        printWindow.document.write(`
+            <style>
+                body { font-family: sans-serif; padding: 20px; }
+                table { width: 100%; border-collapse: collapse; }
+                th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+            </style>
+        `);
+        printWindow.document.write('</head><body>');
+        printWindow.document.write(clonedContainer.innerHTML);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+    };    
     return (
         <div ref={containerRef} className="p-4">
             {/* Controls (reload, export, perPage, search) */}
-            <div className="flex flex-wrap justify-between items-center mb-4 gap-4">
+            <div className="flex flex-wrap justify-between items-center mb-4 gap-4 print-ignore">
                 <div className="flex items-center flex-wrap gap-2">
                     <button className="table-btn px-4 py-2 rounded-lg text-sm flex items-center" onClick={handleReload}>
                         <RefreshCw size={16} className="mr-2" />
                         Reload
+                    </button>
+
+                    <button className="table-btn px-4 py-2 rounded-lg text-sm flex items-center" onClick={handlePrint}>
+                        <FileText size={16} className="mr-2" />
+                        Print
                     </button>
 
                     {isExport && (<div className="relative">
@@ -272,7 +308,7 @@ const DataTable = ({ headers = [], hit_url = '', actions=[], Export=[], reloadTr
                 <span>
                     Showing {data.length > 0 ? (page - 1) * perPage + 1 : 0} to {Math.min(page * perPage, total)} of {total} entries
                 </span>
-                <div className="flex gap-2">
+                <div className="flex gap-2 print-ignore">
                     <button
                         className="px-4 py-2 rounded-xl bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50"
                         disabled={page === 1}

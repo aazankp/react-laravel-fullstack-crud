@@ -27,6 +27,7 @@ class User extends Authenticatable
         'branch',
         'password',
         'old_password',
+        'module_access',
         'status',
         'added_by',
     ];
@@ -48,6 +49,7 @@ class User extends Authenticatable
         return [
             'password' => 'hashed',
             'old_password' => 'hashed',
+            'module_access' => 'array',
         ];
     }
 }

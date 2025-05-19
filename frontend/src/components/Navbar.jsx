@@ -16,6 +16,7 @@ const Navbar = () => {
 
   const dispatch = useDispatch();
   const isDarkMode = useSelector((state) => state.theme.mode);
+  const user_name = useSelector((state) => state.auth.user_name);
   const { showError } = useError();
   const navigate = useNavigate();
 
@@ -45,9 +46,6 @@ const Navbar = () => {
         }
       });
 
-      console.log(response)
-      // return
-
       if(response.data.status)
       {
         dispatch(logout());
@@ -64,9 +62,9 @@ const Navbar = () => {
   };
 
   const dropdownClasses = (isOpen) =>
-    `absolute right-0 mt-2 w-48 rounded-md shadow-lg transition-all transform duration-200 ease-out origin-top-right
+    `absolute right-0 mt-2 w-48 rounded-md shadow-lg z-50 transition-all transform duration-200 ease-out origin-top-right
      ${isOpen ? 'scale-100 opacity-100 translate-y-0 pointer-events-auto' : 'scale-95 opacity-0 -translate-y-2 pointer-events-none'}
-     bg-white text-black dark:bg-gray-700 dark:text-gray-200`;
+     bg-white text-black dark:bg-gray-700 dark:text-gray-200`;  
 
   const menuItemClass = `hover:bg-gray-100 dark:hover:bg-gray-600`;
 
@@ -106,7 +104,7 @@ const Navbar = () => {
             className="flex items-center space-x-2 hover:text-gray-900 dark:hover:text-gray-300"
           >
             <img className="w-8 h-8 rounded-full" src="https://i.pravatar.cc/40" alt="User" />
-            <span className="hidden md:inline-block text-black dark:text-gray-200">Aazan Khan</span>
+            <span className="hidden md:inline-block text-black dark:text-gray-200">{user_name}</span>
           </button>
 
           <div className={dropdownClasses(isDropdownOpen)}>

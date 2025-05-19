@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->boolean('status')->default(false);
             $table->string('password');
             $table->string('old_password')->nullable();
+            $table->json('module_access')->nullable();
             $table->unsignedBigInteger('added_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();

@@ -4,9 +4,12 @@ import { api, basePath } from '../services/api';
 
 const PrivateRoute = () => {
   const location = useLocation();
-  const [isAuthorized, setIsAuthorized] = useState(false);
-  const [loading, setLoading] = useState(true);
 
+  const [authState, setAuthState] = useState({
+    isAuthorized: false,
+    loading: true,
+  });
+  
   useEffect(() => {
     const verifyToken = async () => {
       try {
@@ -15,29 +18,25 @@ const PrivateRoute = () => {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
-
-        // console.log('API response:', response.data);
-
+  
         if (response.data.status === 'not_logged_in') {
-          setIsAuthorized(false);
           localStorage.removeItem('token');
+          setAuthState({ isAuthorized: false, loading: false });
         } else {
-          setIsAuthorized(true);
+          setAuthState({ isAuthorized: true, loading: false });
         }
       } catch (error) {
-        setIsAuthorized(false);
         localStorage.removeItem('token');
-      } finally {
-        setLoading(false);
+        setAuthState({ isAuthorized: false, loading: false });
       }
     };
-
+  
     verifyToken();
   }, [location.pathname]);
-
-  if (loading) return null;
-
-  return isAuthorized ? <Outlet /> : <Navigate to="/login" />;
+  
+  if (authState.loading) return null;
+  
+  return authState.isAuthorized ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;

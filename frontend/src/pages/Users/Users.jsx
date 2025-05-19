@@ -1,11 +1,14 @@
 import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Edit, Eye, Trash2 } from 'lucide-react';
+import { Plus, Edit, Eye, Trash2, ShieldCheck } from 'lucide-react';
 import CardWithHeader from '../../components/CardWithHeader';
 import DataTable from '../../components/DataTable';
 import { useError } from '../../contexts/ErrorContext';
 import { LoaderContext } from '../../contexts/LoaderContext';
 import { api, basePath } from '../../services/api';
+import { useSelector } from "react-redux";
+import usePermissions from "../../services/usePermissions";
+import ConfirmModal from '../../components/ConfirmModal';
 
 const Users = () => {
     const navigate = useNavigate();
@@ -14,6 +17,21 @@ const Users = () => {
     const { startLoading, finishLoading } = useContext(LoaderContext);
     const { showError, showSuccess } = useError();
     const [reloadTrigger, setReloadTrigger] = useState(0); // Add reloadTrigger state
+    const userId = useSelector((state) => state.auth.user_id);
+
+    useEffect(() => {
+        startLoading();
+        finishLoading();
+        // const timer = setTimeout(() => {
+        // }, 500);
+
+        // return () => clearTimeout(timer); // cleanup
+    }, []);
+
+    const moduleId = 1;
+    const submoduleId = 2;
+
+    const { canEdit, canDelete, canView, canRoles } = usePermissions(userId, moduleId, submoduleId);
 
     const handleDelete = (itemId) => {
         setDeletingItem(itemId);
@@ -53,22 +71,27 @@ const Users = () => {
     ];
 
     const Actions = [
-        {
+        canView && {
             label: 'View',
             icon: Eye,
             onClick: (item) => navigate(`/organization/users/view/${item.id}`)
         },
-        {
+        canEdit && {
             label: 'Edit',
             icon: Edit,
             onClick: (item) => navigate(`/organization/users/edit/${item.id}`)
         },
-        {
+        canRoles && {
+            label: 'Roles',
+            icon: ShieldCheck,
+            onClick: (item) => navigate(`/organization/users/roles/${item.id}`)
+        },
+        canDelete && {
             label: 'Delete',
             icon: Trash2,
             onClick: (item) => handleDelete(item.id)
         }
-    ];
+    ].filter(Boolean);
 
     const Export = {
         isExport: true,
@@ -96,28 +119,15 @@ const Users = () => {
             />
             
             {showConfirmModal && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-                    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-sm shadow-lg">
-                        <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Confirm Deletion</h2>
-                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-6">
-                            Are you sure you want to delete this user? This action cannot be undone.
-                        </p>
-                        <div className="flex justify-end gap-3">
-                            <button
-                                onClick={() => setShowConfirmModal(false)}
-                                className="px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white rounded hover:bg-gray-400"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={confirmDelete}
-                                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-                            >
-                                Yes, Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <ConfirmModal
+                    isOpen={showConfirmModal}
+                    title="Confirm Deletion"
+                    message="Are you sure you want to delete this user? This action cannot be undone."
+                    onCancel={() => setShowConfirmModal(false)}
+                    onConfirm={confirmDelete}
+                    confirmText="Yes, Delete"
+                    cancelText="Cancel"
+                />
             )}
         </CardWithHeader>
     );

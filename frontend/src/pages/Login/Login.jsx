@@ -36,11 +36,13 @@ const Login = () => {
     setLoading(true);
 
     try {
+      // await api.get('/sanctum/csrf-cookie');
       const response = await api.post(basePath+'/login', formData);
      
-      const { user_id, user_name, user_email } = response.data.user;
-      const token = response.data.token
-      dispatch(loginSuccess({ user_id, user_name, user_email, token }));
+      const { user_id, user_name } = response.data.user;
+      
+      const token = response.data.token;
+      dispatch(loginSuccess({ user_id, user_name, token }));
 
       navigate('/dashboard');
     } catch (err) {

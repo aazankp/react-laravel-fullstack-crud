@@ -21,8 +21,23 @@ const Sidebar = ({ toggleSidebar, isSidebarCollapsed }) => {
       submenuKey: 'organization',
       subItems: [
         { label: 'Users', path: '/organization/users' },
+        { label: 'Account Settings', path: '/settings/account' },
       ],
-    }
+    },
+    {
+      label: 'Settings',
+      icon: <FaCogs className="w-5 h-5" />,
+      submenuKey: 'settings',
+      subItems: [
+        { label: 'Users settings', path: '/settings/users' },
+        { label: 'Account Settings', path: '/settings/account' },
+      ],
+    },
+    {
+      label: 'Notifications',
+      icon: <FaBell className="w-5 h-5" />,
+      path: '/notifications',
+    },
   ];
 
   const activeRoute = (route) => location.pathname.startsWith(route);

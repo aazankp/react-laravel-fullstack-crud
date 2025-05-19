@@ -12,7 +12,7 @@ const Dashboard = () => {
   return (
     <div className="home-page">
       <h1>Welcome to the Home Page</h1>
-      <p>This is a sample home page in your app.</p>
+      <p>This is a sample home page in your MERN app.</p>
     </div>
   );
 };

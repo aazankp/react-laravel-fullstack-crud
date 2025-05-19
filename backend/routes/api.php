@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserModuleAccessController;
 
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -21,5 +22,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/get_users', 'getUsers');
         Route::get('/export_csv_users', 'exportUsers');
         Route::get('/export_pdf_users', 'exportUsersPDF');
+    });
+
+
+    Route::controller(UserModuleAccessController::class)->group(function () {
+        Route::get('/modules', 'index');
+        Route::get('/users/module-access/{user}', 'getUserAccess');
+        Route::post('/users/save-module-access/{user}', 'saveAccess');
     });
 });
