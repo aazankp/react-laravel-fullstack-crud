@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FaTachometerAlt, FaBell, FaCogs } from 'react-icons/fa';
+import { FaTachometerAlt, FaCogs } from 'react-icons/fa';
 
 const Sidebar = ({ toggleSidebar, isSidebarCollapsed }) => {
   const location = useLocation();
@@ -21,22 +21,7 @@ const Sidebar = ({ toggleSidebar, isSidebarCollapsed }) => {
       submenuKey: 'organization',
       subItems: [
         { label: 'Users', path: '/organization/users' },
-        { label: 'Account Settings', path: '/settings/account' },
       ],
-    },
-    {
-      label: 'Settings',
-      icon: <FaCogs className="w-5 h-5" />,
-      submenuKey: 'settings',
-      subItems: [
-        { label: 'Users settings', path: '/settings/users' },
-        { label: 'Account Settings', path: '/settings/account' },
-      ],
-    },
-    {
-      label: 'Notifications',
-      icon: <FaBell className="w-5 h-5" />,
-      path: '/notifications',
     },
   ];
 
@@ -67,12 +52,6 @@ const Sidebar = ({ toggleSidebar, isSidebarCollapsed }) => {
   const getItemClasses = () =>
     `flex items-center p-2 rounded-md transition-colors hover:bg-gray-200 hover:text-black dark:hover:bg-gray-700 dark:hover:text-gray-100`;
 
-  const getSubItemClasses = (isActive) =>
-    `block p-2 rounded-md transition-colors ${
-      isActive
-        ? 'bg-[#655de9] text-white'
-        : 'hover:bg-gray-200 hover:text-black dark:hover:bg-gray-700 dark:hover:text-gray-100'
-    }`;
 
   return (
     <div
